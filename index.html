@@ -249,7 +249,12 @@ function startRec() {
     mediaRec = new MediaRecorder(stream);
     mediaRec.ondataavailable = e => chunks.push(e.data);
     mediaRec.onstop = () => {
-      recordings[step] = new Blob(chunks, { type: 'audio/webm' });
+      const blob = new Blob(chunks, { type: 'audio/webm' });
+recordings[step] = blob;
+
+const fileName = name.replace(/\s+/g, '_') + '_Q' + (step + 1) + '.webm';
+
+window.firebaseUpload(blob, fileName);
       stream.getTracks().forEach(t => t.stop());
       clearInterval(timerInt); elapsed = 0;
       render();
@@ -323,6 +328,27 @@ function dl(i) {
 }
 
 render();
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCmOS8VJv_M3oPIsgQezbpS0TGM8XnVdnk",
+  authDomain: "entrevista-tcc-d3c18.firebaseapp.com",
+  projectId: "entrevista-tcc-d3c18",
+  storageBucket: "entrevista-tcc-d3c18.firebasestorage.app",
+  messagingSenderId: "525949357651",
+  appId: "1:525949357651:web:58e6546d36b24e4239c0a6"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+window.firebaseUpload = async (file, fileName) => {
+  const storageRef = ref(storage, 'audios/' + fileName);
+  return uploadBytes(storageRef, file);
+};
+</script>
 </script>
 </body>
 </html>
