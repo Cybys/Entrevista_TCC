@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrevista TCC — Gestão de Marca nas Plataformas Digitais</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 660px; margin: 0 auto; }
+
+  /* header */
+  .top-bar { margin-bottom: 2rem; }
+  .top-bar h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; }
+  .top-bar p { font-size: 13px; color: #666; margin-top: 3px; }
+
+  /* progress */
+  .progress-label { font-size: 12px; color: #888; margin-bottom: 5px; }
+  .progress-track { height: 4px; background: #ddd; border-radius: 99px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 4px; background: #6C63FF; border-radius: 99px; transition: width 0.35s ease; }
+
+  /* block badge */
+  .block-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    color: #534AB7; background: #EEEDFE;
+    padding: 4px 12px; border-radius: 99px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  /* question card */
+  .card {
+    background: #fff;
+    border: 1px solid #e8e6e0;
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .question-text { font-size: 16px; line-height: 1.65; margin-bottom: 1.25rem; }
+
+  /* recorder row */
+  .recorder-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .btn-rec {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 18px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1px solid #ccc; background: #fff; color: #333;
+    transition: all 0.15s;
+  }
+  .btn-rec:hover { background: #f5f4f0; }
+  .btn-rec.recording { background: #FFF0F0; border-color: #e24b4a; color: #a32d2d; }
+  .btn-rec .dot { width: 9px; height: 9px; border-radius: 50%; background: #aaa; flex-shrink: 0; }
+  .btn-rec.recording .dot { background: #e24b4a; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .timer { font-size: 13px; color: #888; font-variant-numeric: tabular-nums; min-width: 36px; }
+  .timer.warn { color: #BA7517; font-weight: 600; }
+  .pill-ok { font-size: 12px; background: #EAF3DE; color: #3B6D11; padding: 3px 11px; border-radius: 99px; }
+
+  audio { width: 100%; margin-top: 12px; height: 36px; border-radius: 8px; }
+
+  /* nav buttons */
+  .nav { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1.5rem; }
+  .btn {
+    padding: 10px 22px; border-radius: 9px; font-size: 14px; font-weight: 500;
+    cursor: pointer; border: 1px solid #ccc; background: #fff; color: #333;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { background: #f5f4f0; }
+  .btn.primary { background: #6C63FF; border-color: #6C63FF; color: #fff; }
+  .btn.primary:hover { opacity: 0.88; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* intro */
+  .intro-box { background: #f0effa; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .intro-box h2 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #333; }
+  .intro-box ul { padding-left: 1.2rem; font-size: 14px; color: #555; line-height: 2.1; }
+  label.field-label { font-size: 13px; color: #555; display: block; margin-bottom: 5px; }
+  input[type=text] {
+    width: 100%; padding: 11px 14px; border: 1px solid #d0cec8;
+    border-radius: 9px; font-size: 15px; background: #fff; color: #1a1a1a;
+  }
+  input[type=text]:focus { outline: none; border-color: #6C63FF; box-shadow: 0 0 0 3px #EEEDFE; }
+
+  /* done */
+  .done-wrap { text-align: center; padding: 2.5rem 1rem 1.5rem; }
+  .done-wrap .emoji { font-size: 48px; margin-bottom: 1rem; }
+  .done-wrap h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .done-wrap p { font-size: 14px; color: #666; line-height: 1.7; }
+
+  /* summary table */
+  .summary { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 1.5rem; }
+  .summary th { text-align: left; padding: 9px 10px; border-bottom: 1px solid #e8e6e0; color: #888; font-weight: 500; }
+  .summary td { padding: 9px 10px; border-bottom: 1px solid #ece9e3; vertical-align: middle; }
+  .pill-no { font-size: 12px; background: #f0efea; color: #888; padding: 3px 10px; border-radius: 99px; }
+  .btn-dl { padding: 4px 12px; font-size: 12px; border: 1px solid #ccc; background: #fff; border-radius: 7px; cursor: pointer; }
+  .btn-dl:hover { background: #f5f4f0; }
+
+  /* note box */
+  .note { font-size: 12px; color: #888; background: #f5f4f0; border-radius: 8px; padding: 10px 14px; margin-top: 1.25rem; line-height: 1.7; }
+
+  @media (max-width: 480px) {
+    .card { padding: 1.1rem; }
+    .question-text { font-size: 15px; }
+    .btn { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+const blocks = [
+  {
+    title: "Bloco 1 — Atuação nas plataformas digitais",
+    questions: [
+      "Como você utiliza as plataformas digitais no seu trabalho atualmente?",
+      "Quais plataformas são mais relevantes para você e por quê?",
+      "Como você define onde concentrar seus esforços de comunicação?"
+    ]
+  },
+  {
+    title: "Bloco 2 — Gestão de marca",
+    questions: [
+      "Você enxerga sua atuação como uma construção de marca? Como isso influencia suas decisões?",
+      "Como você define o tipo de conteúdo que publica?",
+      "Existe uma estratégia clara de posicionamento ou ela foi sendo construída ao longo do tempo?"
+    ]
+  },
+  {
+    title: "Bloco 3 — Engajamento e audiência",
+    questions: [
+      "Como você percebe a resposta do público ao seu conteúdo?",
+      "Você adapta sua comunicação com base nessas interações?",
+      "Que tipo de conteúdo tende a gerar maior engajamento?"
+    ]
+  },
+  {
+    title: "Bloco 4 — Algoritmos e visibilidade",
+    questions: [
+      "Você acredita que os algoritmos influenciam seu alcance? De que forma?",
+      "Já utilizou estratégias específicas para aumentar a visibilidade nas plataformas?",
+      "Existe algum padrão que você identifica em conteúdos que performam melhor?"
+    ]
+  },
+  {
+    title: "Bloco 5 — Autopromoção e percepção do público",
+    questions: [
+      "Como você equilibra conteúdos promocionais e conteúdos mais espontâneos?",
+      "Você percebe diferenças na forma como o público reage a esses conteúdos?",
+      "A autopromoção influencia a percepção da sua marca?"
+    ]
+  }
+];
+
+const flat = [];
+blocks.forEach(b => b.questions.forEach(q => flat.push({ block: b.title, q })));
+const TOTAL = flat.length;
+const MAX_S = 120;
+
+let name = '', step = -1, recordings = [], mediaRec = null, chunks = [], timerInt = null, elapsed = 0;
+
+function render() {
+  const app = document.getElementById('app');
+  if (step === -1) return renderIntro(app);
+  if (step >= TOTAL) return renderDone(app);
+  renderQ(app);
+}
+
+function renderIntro(app) {
+  app.innerHTML = `
+    <div class="top-bar"><h1>Entrevista — TCC FGV</h1><p>Gestão de Marca e Estratégias de Comunicação Digital de Artistas nas Plataformas Digitais</p></div>
+    <div class="intro-box">
+      <h2>Como funciona</h2>
+      <ul>
+        <li>15 perguntas divididas em 5 blocos temáticos</li>
+        <li>Cada resposta pode ter até <strong>2 minutos</strong> de áudio</li>
+        <li>Grave, ouça, e avance para a próxima pergunta</li>
+        <li>No final, baixe todos os seus áudios</li>
+      </ul>
+    </div>
+    <label class="field-label" for="pname">Seu nome (artístico ou como prefere ser identificado)</label>
+    <input type="text" id="pname" placeholder="Ex: João Silva" value="${name}" />
+    <div class="nav" style="margin-top:1.25rem">
+      <button class="btn primary" onclick="start()">Começar →</button>
+    </div>
+    <p class="note">⚠️ Os áudios ficam salvos apenas nesta sessão do navegador. Não feche ou recarregue a página antes de baixar tudo no final.</p>
+  `;
+}
+
+function start() {
+  const v = document.getElementById('pname').value.trim();
+  if (!v) { alert('Informe seu nome antes de começar.'); return; }
+  name = v; step = 0;
+  recordings = new Array(TOTAL).fill(null);
+  render();
+}
+
+function renderQ(app) {
+  const item = flat[step];
+  const rec = recordings[step];
+  const pct = Math.round((step / TOTAL) * 100);
+
+  app.innerHTML = `
+    <div class="top-bar"><h1>Entrevista — TCC FGV</h1><p>${name}</p></div>
+    <p class="progress-label">Pergunta ${step + 1} de ${TOTAL}</p>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <span class="block-badge">${item.block}</span>
+    <div class="card">
+      <p class="question-text">${item.q}</p>
+      <div class="recorder-row">
+        <button class="btn-rec" id="rbtn" onclick="toggleRec()">
+          <span class="dot"></span>
+          <span id="rlabel">${rec ? 'Regravar' : 'Gravar'}</span>
+        </button>
+        <span class="timer" id="tdisp">0:00</span>
+        ${rec ? '<span class="pill-ok">✓ gravado</span>' : ''}
+      </div>
+      ${rec ? '<audio id="aprev" controls></audio>' : ''}
+    </div>
+    <div class="nav">
+      ${step > 0 ? '<button class="btn" onclick="back()">← Voltar</button>' : ''}
+      <button class="btn primary" id="bnext" onclick="next()" ${!rec ? 'disabled' : ''}>
+        ${step === TOTAL - 1 ? 'Finalizar' : 'Próxima →'}
+      </button>
+    </div>
+  `;
+
+  if (rec) {
+    const audio = document.getElementById('aprev');
+    if (audio) audio.src = URL.createObjectURL(rec);
+  }
+}
+
+function toggleRec() {
+  if (mediaRec && mediaRec.state === 'recording') stopRec();
+  else startRec();
+}
+
+function startRec() {
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    chunks = [];
+    mediaRec = new MediaRecorder(stream);
+    mediaRec.ondataavailable = e => chunks.push(e.data);
+    mediaRec.onstop = () => {
+      recordings[step] = new Blob(chunks, { type: 'audio/webm' });
+      stream.getTracks().forEach(t => t.stop());
+      clearInterval(timerInt); elapsed = 0;
+      render();
+    };
+    mediaRec.start();
+    elapsed = 0; tick();
+    timerInt = setInterval(() => { elapsed++; tick(); if (elapsed >= MAX_S) stopRec(); }, 1000);
+    const btn = document.getElementById('rbtn');
+    if (btn) { btn.classList.add('recording'); }
+    const lbl = document.getElementById('rlabel');
+    if (lbl) lbl.textContent = 'Parar';
+  }).catch(() => alert('Não foi possível acessar o microfone. Verifique as permissões do navegador.'));
+}
+
+function stopRec() {
+  if (mediaRec && mediaRec.state === 'recording') mediaRec.stop();
+}
+
+function tick() {
+  const el = document.getElementById('tdisp');
+  if (!el) return;
+  const m = Math.floor(elapsed / 60), s = elapsed % 60;
+  el.textContent = m + ':' + String(s).padStart(2, '0');
+  el.className = 'timer' + (elapsed >= 100 ? ' warn' : '');
+}
+
+function next() {
+  if (mediaRec && mediaRec.state === 'recording') stopRec();
+  step++; render();
+}
+
+function back() {
+  if (mediaRec && mediaRec.state === 'recording') stopRec();
+  step--; render();
+}
+
+function renderDone(app) {
+  app.innerHTML = `
+    <div class="done-wrap">
+      <div class="emoji">🎙️</div>
+      <h2>Entrevista concluída!</h2>
+      <p>Obrigado, <strong>${name}</strong>!<br>Baixe seus áudios abaixo antes de fechar esta página.</p>
+    </div>
+    <table class="summary">
+      <thead><tr><th>#</th><th>Pergunta</th><th>Status</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <p class="note">⬇️ Clique em "baixar" em cada pergunta para salvar o arquivo de áudio. Envie os arquivos para o pesquisador conforme combinado.</p>
+  `;
+  const tb = document.getElementById('tbody');
+  flat.forEach((item, i) => {
+    const rec = recordings[i];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:#aaa">${i + 1}</td>
+      <td style="max-width:280px;font-size:13px">${item.q}</td>
+      <td>${rec ? '<span class="pill-ok">✓ gravado</span>' : '<span class="pill-no">sem áudio</span>'}</td>
+      <td>${rec ? `<button class="btn-dl" onclick="dl(${i})">⬇ baixar</button>` : ''}</td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function dl(i) {
+  const rec = recordings[i];
+  if (!rec) return;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(rec);
+  a.download = name.replace(/\s+/g, '_') + '_Q' + (i + 1) + '.webm';
+  a.click();
+}
+
+render();
+</script>
+</body>
+</html>
